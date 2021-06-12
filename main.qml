@@ -5,6 +5,8 @@ import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.0
 import QtQuick.Controls.Styles 1.4
 import QtGraphicalEffects 1.0
+import QtMultimedia 5.12
+
 
 ApplicationWindow {
     visible: true
@@ -17,14 +19,38 @@ ApplicationWindow {
             Label { text: "" }
         }
     }
-    style: ApplicationWindowStyle {
-        background: Rectangle {
-            color: "black"
-            Image {
-                id: hudBG
-                anchors.fill: parent
-                source: "images/CameraHud.png"
+
+    Item {
+        id: camItem
+        width: parent.width
+        height: parent.height
+        Camera {
+            id: camera
+
+            imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
+
+            exposure {
+                exposureCompensation: -1.0
+                exposureMode: Camera.ExposurePortrait
             }
+
+            flash.mode: Camera.FlashRedEyeReduction
+
+            imageCapture {
+                onImageCaptured: {
+                    photoPreview.source = preview  // Show the preview in an Image
+                }
+            }
+        }
+
+        VideoOutput {
+            source: camera
+            anchors.fill: parent
+            focus : visible // to receive focus and capture key events when visible
+        }
+
+        Image {
+            id: photoPreview
         }
     }
 
@@ -151,4 +177,12 @@ ApplicationWindow {
             }
         }
     }
+
+    Image {
+        id: hudBG
+        z: 10
+        anchors.fill: parent
+        source: "images/CameraHud.png"
+    }
+
 }
