@@ -16,17 +16,72 @@ ApplicationWindow {
     statusBar: StatusBar {
         RowLayout {
             id: statusBar
-            Label { text: "" }
+            Label { text: QtMultimedia.defaultCamera.deviceId }
         }
     }
+
 
     Item {
         id: camItem
         width: parent.width
         height: parent.height
+
+        focus: true
+        Keys.onPressed: {
+            if (event.key === Qt.Key_Up && !event.isAutoRepeat){
+    //            ssh.sendCommand("./up")
+                pushUpArrow.color = "transparent"
+                event.accepted = true;
+            }
+            if (event.key === Qt.Key_Down && !event.isAutoRepeat){
+//                ssh.sendCommand("./down")
+                pushDownArrow.color = "transparent"
+                event.accepted = true;
+
+            }
+            if (event.key === Qt.Key_Right && !event.isAutoRepeat){
+//                ssh.sendCommand("./right")
+                pushRightArrow.color = "transparent"
+                event.accepted = true;
+            }
+            if (event.key === Qt.Key_Left && !event.isAutoRepeat){
+//                ssh.sendCommand("./left")
+                pushLeftArrow.color = "transparent"
+                event.accepted = true;
+
+            }
+        }
+
+        Keys.onReleased: {
+            if (event.key ===  Qt.Key_Up  && !event.isAutoRepeat)
+            {
+//                ssh.sendCommand("./stop")
+                pushUpArrow.color = "#80000040"
+                event.accepted = true;
+            }
+            if (event.key ===  Qt.Key_Down  && !event.isAutoRepeat)
+            {
+//                ssh.sendCommand("./stop")
+                pushDownArrow.color = "#80000040"
+                event.accepted = true;
+            }
+            if (event.key ===  Qt.Key_Right  && !event.isAutoRepeat)
+            {
+//                ssh.sendCommand("./stop")
+                pushRightArrow.color = "#80000040"
+                event.accepted = true;
+            }
+            if (event.key ===  Qt.Key_Left && !event.isAutoRepeat)
+            {
+//                ssh.sendCommand("./stop")
+                pushLeftArrow.color = "#80000040"
+                event.accepted = true;
+            }
+        }
+
         Camera {
             id: camera
-
+            deviceId: "/dev/video"
             imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
 
             exposure {
@@ -85,6 +140,7 @@ ApplicationWindow {
                     color: "#80000040"
                 }
                 MouseArea {
+                    propagateComposedEvents: true
                     anchors.fill: parent
                     onPressed: {
                         pushUpArrow.color= "transparent"
