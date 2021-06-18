@@ -5,13 +5,13 @@ import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.0
 import QtQuick.Controls.Styles 1.4
 import QtGraphicalEffects 1.0
-import QtMultimedia 5.12
+import CvCamera 1.0
 
 
 ApplicationWindow {
     visible: true
-    width: 640
-    height: 480
+    width: 1280
+    height: 720
     title: qsTr("ExRover OS")
     statusBar: StatusBar {
         RowLayout {
@@ -78,35 +78,11 @@ ApplicationWindow {
                 event.accepted = true;
             }
         }
+    }
 
-        Camera {
-            id: camera
-            deviceId: "/dev/video"
-            imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
-
-            exposure {
-                exposureCompensation: -1.0
-                exposureMode: Camera.ExposurePortrait
-            }
-
-            flash.mode: Camera.FlashRedEyeReduction
-
-            imageCapture {
-                onImageCaptured: {
-                    photoPreview.source = preview  // Show the preview in an Image
-                }
-            }
-        }
-
-        VideoOutput {
-            source: camera
-            anchors.fill: parent
-            focus : visible // to receive focus and capture key events when visible
-        }
-
-        Image {
-            id: photoPreview
-        }
+    CvCamera {
+    anchors.fill: parent
+    running: true
     }
 
     Item {
